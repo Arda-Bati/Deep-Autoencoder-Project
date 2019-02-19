@@ -5,7 +5,6 @@ folder2 = "Noise_Types\";
 folder3 = "Clean\";
 noise_types = ["airport\", "babble\", "car\", "exhibition\", "restaurant\", "station\", "street\", "train\"];
 SNRs = ["0dB","5dB","10dB","15dB"];
-noises = cell(6,1);
 
 fname = "";
 cur_file = "";
