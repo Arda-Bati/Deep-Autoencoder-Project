@@ -1,6 +1,9 @@
 # ECE271B Project Files
 
-128kbps Train & Test files (SPIB Noise sources, 4 for Train, 6 for Test):   
+Noizeus Noise sources 128kbps Train & Test files (4 for Train, 6 for Test):  
+https://drive.google.com/open?id=1NKsQkCeixJ1NlWp7DxeqKxzP0golf8Wk
+
+SPIB Noise sources 128kbps Train & Test files (4 for Train, 6 for Test):   
 https://drive.google.com/open?id=13kuzP1QQ4voPFPrpmedn0d1dON3g_Cay
 
 128kbps TIMIT files:   
