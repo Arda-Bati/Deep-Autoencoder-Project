@@ -113,10 +113,6 @@ for n_index = 1:noise_count
 end
 toc
 
-
-% num2str(j,'%02d')
-% 
-% 
 % [orinigal, fs] = audioread('sp10.wav');
 % [noise, fs] = audioread('ssn.wav');
 % 
