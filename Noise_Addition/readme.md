@@ -1,0 +1,1 @@
+Use the main.m to create noise files. Before running the loop fill either the 128 or 512 kbps TIMIT folders. Also put the noise wave files under the noises/ folder. Check the main_loop code to be sure that the directories are aligned to the code.
