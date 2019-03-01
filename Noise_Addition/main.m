@@ -26,8 +26,8 @@ for n_index = 1:(noise_count - 2)
     mkdir(fullfile('results\test', noise_name));
     
     for SNR = SNRs
-        mkdir(fullfile('results\train', noise_name,num2str(SNR)));
-        mkdir(fullfile('results\test', noise_name,num2str(SNR)));
+        mkdir(fullfile('results\train', noise_name,strcat(num2str(SNR),"dB")));
+        mkdir(fullfile('results\test', noise_name,strcat(num2str(SNR),"dB")));
     end
 end
 
@@ -58,7 +58,7 @@ for n_index = 1:noise_count
             ssnr = segsnr(clean_speech, noisy, fs);
             %snr_this = snr_self(orinigal, noisy);
             %fprintf('SegSNR: %0.2f dB\n', ssnr);
-            cur_path = fullfile(result_f,data_type,noise_name,num2str(SNR));
+            cur_path = fullfile(result_f,data_type,noise_name,strcat(num2str(SNR),"dB"));
             audiowrite(fullfile(cur_path,clean_fname),noisy,fs);
             
             names{speech_index} = clean_fname;
@@ -102,7 +102,7 @@ for n_index = 1:noise_count
             ssnr = segsnr(clean_speech, noisy, fs);
             %snr_this = snr_self(orinigal, noisy);
             %fprintf('SegSNR: %0.2f dB\n', ssnr);
-            cur_path = fullfile(result_f,data_type,noise_name,num2str(SNR));
+            cur_path = fullfile(result_f,data_type,noise_name,strcat(num2str(SNR),"dB"));
             audiowrite(fullfile(cur_path,clean_fname),noisy,fs);
             
             names{count} = clean_fname;
