@@ -1,10 +1,10 @@
 %Reading target and noise files
 clc
 clear all
-result_f = "results";
-noises_f = "noises";
-%timit_f = "timit_512\timit_64\";
-timit_f = "timit_128\timit";
+result_f = 'results';
+noises_f = 'noises';
+%timit_f = 'timit_512\timit_64\';
+timit_f = 'timit_128\timit';
 fs = 8000;
 
 mkdir results
@@ -22,16 +22,16 @@ for n_index = 1:(noise_count - 2)
     noise_types{n_index} = noise_files(n_index).name;
     noise_name = noise_types{n_index};
     noise_name = noise_name(1:(size(noise_name,2)-4));
-    mkdir(fullfile("results\train", noise_name));
-    mkdir(fullfile("results\test", noise_name));
+    mkdir(fullfile('results\train', noise_name));
+    mkdir(fullfile('results\test', noise_name));
     
     for SNR = SNRs
-        mkdir(fullfile("results\train", noise_name,num2str(SNR)));
-        mkdir(fullfile("results\test", noise_name,num2str(SNR)));
+        mkdir(fullfile('results\train', noise_name,num2str(SNR)));
+        mkdir(fullfile('results\test', noise_name,num2str(SNR)));
     end
 end
 
-data_type = "train";
+data_type = 'train';
 clean_file_names = fullfile(timit_f,data_type);
 clean_files = dir(fullfile(clean_file_names,'*.wav'));
 data_size = size(clean_files,1);
@@ -64,12 +64,12 @@ for n_index = 1:noise_count
             names{speech_index} = clean_fname;
             seg_values(speech_index) = ssnr;      
         end
-        writetable(cell2table([names num2cell(seg_values)]),fullfile(cur_path,"SegSNRs.csv"),'writevariablenames',0)
+        writetable(cell2table([names num2cell(seg_values)]),fullfile(cur_path,'SegSNRs.csv'),'writevariablenames',0)
     end
 end
 toc
 
-data_type = "test\";
+data_type = 'test\';
 clean_file_names = fullfile(timit_f,data_type);
 clean_files = dir(fullfile(clean_file_names,'*.wav'));
 data_size = size(clean_files,1);
@@ -102,13 +102,13 @@ for n_index = 1:noise_count
             ssnr = segsnr(clean_speech, noisy, fs);
             %snr_this = snr_self(orinigal, noisy);
             %fprintf('SegSNR: %0.2f dB\n', ssnr);
-            cur_path = fullfile(result_f,data_type,noise_name,"\",num2str(SNR),"db\");
+            cur_path = fullfile(result_f,data_type,noise_name,num2str(SNR));
             audiowrite(fullfile(cur_path,clean_fname),noisy,fs);
             
             names{count} = clean_fname;
             seg_values(count) = ssnr;      
         end
-        writetable(cell2table([names num2cell(seg_values)]),fullfile(cur_path,"SegSNRs.csv"),'writevariablenames',0)
+        writetable(cell2table([names num2cell(seg_values)]),fullfile(cur_path,'SegSNRs.csv'),'writevariablenames',0)
     end
 end
 toc
