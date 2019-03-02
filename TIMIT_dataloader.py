@@ -40,7 +40,7 @@ class TIMITDataset(Dataset):
                                              self.SNR[ind[2]],
                                              self.data_filenames.ix[ind[0]] + '.npy'))
 
-        input = spec_noisy[:, ind[3] - self.window_size: ind[3] + self.window_size + 1]
+        input = spec_noisy[:, :, ind[3] - self.window_size: ind[3] + self.window_size + 1]
         # target = spec_clean[:, ind[3]]
 
         return input
@@ -80,6 +80,7 @@ if __name__ == '__main__':
                                       num_frame=11)
 
     for minibatch_count, inputs in enumerate(tqdm(train_loader), 0):
+        print(inputs.shape)
         pass
 
     print(inputs.shape)
