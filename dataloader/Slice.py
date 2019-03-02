@@ -18,14 +18,18 @@ from scipy import signal
 from scipy.io import wavfile
 import pandas as pd
 clean_train_folder = r'F:\timit\train'
-noisy_train_folder=r'F:\ECE271B_Project\Noise_Addition\results\train'
-noisy_types=[r'\babble',r'\destroyerengine',r'\factory1',r'\hfchannel']
-SNRs=[r'\5db',r'\10db',r'\15db',r'\20db',r'\0db',r'\-5db']
+
+#noisy_types=[r'\babble',r'\destroyerengine',r'\factory1',r'\hfchannel']
+#SNRs=[r'\5db',r'\10db',r'\15db',r'\20db',r'\0db',r'\-5db']
+noisy_types=[r""]
+SNRs=[r""]
 noisy_train_folder = r'F:\ECE271B_Project\Noise_Addition\results\train'
+#to convert clean data
+noisy_train_folder = r'F:\timit\train'
 noisy_test_folder = r'F:\ECE271B_Project\Noise_Addition\results\test'
 clean_test_folder =r'F:\ECE271B_Project\Noise_Addition\results\test\babble\0db'
 #noisy_test_folder =r'F:\test_results'
-serialized_train_folder = r'F:\train_np_results'
+serialized_train_folder = r'F:\train_np_results_clean'
 serialized_test_folder = r'F:\test_np_results'
 window_size = 2 ** 14  # about 1 second of samples
 #sample_rate = 16000

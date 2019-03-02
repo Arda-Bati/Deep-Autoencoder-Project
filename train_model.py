@@ -12,7 +12,7 @@ from tqdm import tqdm, tqdm_notebook
 from Model import autoencoder
 
 num_epochs = 10           # Number of full passes through the dataset
-batch_size = 20          # Number of samples in each minibatch
+batch_size = 100          # Number of samples in each minibatch
 num_frame = 11
 use_cuda = torch.cuda.is_available()
 
@@ -28,7 +28,7 @@ else: # Otherwise, train on the CPU
 
 train_loader = TIMIT_dataloader.prepareTIMIT_train(batch_size=batch_size,
                                            num_frame=num_frame,
-                                           extras=extras)
+                                           extras=False)
 
 print('train_loader complete')
 model = autoencoder().cuda()
@@ -42,22 +42,27 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 loss_list = []
 
-for epoch in tqdm(range(num_epochs)):
+for epoch in range(num_epochs):
 
     N = 50
     # Get the next minibatch of images, labels for training
-    for minibatch_count, (inputs, targets) in enumerate(train_loader, 0):
-        print(inputs)
+    #for minibatch_count, (inputs,target) in enumerate(tqdm(train_loader), 0):
+    for minibatch_count, (inputs, target) in enumerate(tqdm(train_loader), 0):
+        #print(inputs.shape)
+        #print(inputs)
+        #print(target.shape)
+        #inputs=torch.from_numpy(inputs)
+        #target=torch.from_numpy(target)
 
         # Put the minibatch data in CUDA Tensors and run on the GPU if supported
-        inputs, targets = inputs.to(computing_device), targets.to(computing_device)
+        inputs, target = inputs.to(computing_device), target.to(computing_device)
 
         # Zero out the stored gradient (buffer) from the previous iteration
         optimizer.zero_grad()
 
         # Perform the forward pass through the network and compute the loss
         outputs = model(inputs)
-        loss = criterion(outputs, targets)
+        loss = criterion(outputs, target)
 
         # Automagically compute the gradients and backpropagate the loss through the network
         loss.backward()
