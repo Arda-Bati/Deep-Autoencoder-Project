@@ -14,7 +14,7 @@ class TIMITDataset(Dataset):
     def __init__ (self,):
 
         self.data_dir = './dataset/train'
-        self.data_info = pd.read_csv('./dataset/info.csv')
+        self.data_info = pd.read_csv('./dataset/list.csv')
         self.data_filenames = self.data_info['filename']
         self.noisetypes = {0: 'babble', 1: 'destroyerops',
                            2: 'factory1', 3: 'hfchannel'}
@@ -37,8 +37,8 @@ class TIMITDataset(Dataset):
                                 self.SNR[ind[2]]
                                 self.data_filenames.ix[ind[0]])
 
-        input = spec_noisy[:, ind[0] - window_size: ind[0] + window_size + 1]
-        target = spec_clean[:, ind[0]]
+        input = spec_noisy[:, ind[3] - window_size: ind[3] + window_size + 1]
+        target = spec_clean[:, ind[3]]
 
         return (input, target)
 
@@ -49,11 +49,12 @@ def prepareTIMIT_train(batch_size = 1, num_frame = 11, extras={}):
     dataset = TIMITDataset(window_size)
 
     dataset_size = len(dataset)
+    max_indices = dataset.data_info['max_idx']
     indices = []
     for i in range(dataset_size):
         for j in range(len(dataset.noisetypes)):
             for k in range(len(dataset.SNR)):
-                for l in range(window_size, max_indices[i] - window_size):
+                for l in range(window_size, max_indices.ix[i] - window_size):
                     indices.append((i, j, k, l))
 
     sample = SubsetRandomSampler(indices)
