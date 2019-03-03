@@ -1,15 +1,17 @@
 %Reading target and noise files
 clc
-clear all
+clear
 result_f = 'results';
 noises_f = 'noises';
-%timit_f = 'timit_512\timit_64\';
-timit_f = 'timit_128\timit';
+%timit_f = fullfile('timit_512','timit_64');
+timit_f = fullfile('timit_128','timit');
 fs = 8000;
 
 mkdir results
-mkdir results\train
-mkdir results\test
+train_folder = fullfile('results','train');
+test_folder = fullfile('results','test');
+mkdir(train_folder);
+mkdir(test_folder);
 
 clean_file_names = noises_f;
 noise_files = dir(fullfile(clean_file_names,'*.wav'));
@@ -18,16 +20,16 @@ noise_count = numel(noise_files);
 SNRs = -5:5:20;
 
 noise_types = cell(1,noise_count);
-for n_index = 1:(noise_count - 2)
+for n_index = 1:(noise_count)
     noise_types{n_index} = noise_files(n_index).name;
     noise_name = noise_types{n_index};
     noise_name = noise_name(1:(size(noise_name,2)-4));
-    mkdir(fullfile('results\train', noise_name));
-    mkdir(fullfile('results\test', noise_name));
+    mkdir(train_folder, noise_name);
+    mkdir(test_folder, noise_name);
     
     for SNR = SNRs
-        mkdir(fullfile('results\train', noise_name,strcat(num2str(SNR),"dB")));
-        mkdir(fullfile('results\test', noise_name,strcat(num2str(SNR),"dB")));
+        mkdir(fullfile(train_folder, noise_name,strcat(num2str(SNR),'dB')));
+        mkdir(fullfile(test_folder, noise_name,strcat(num2str(SNR),'dB')));
     end
 end
 
@@ -58,7 +60,7 @@ for n_index = 1:noise_count
             ssnr = segsnr(clean_speech, noisy, fs);
             %snr_this = snr_self(orinigal, noisy);
             %fprintf('SegSNR: %0.2f dB\n', ssnr);
-            cur_path = fullfile(result_f,data_type,noise_name,strcat(num2str(SNR),"dB"));
+            cur_path = fullfile(result_f,data_type,noise_name,strcat(num2str(SNR),'dB'));
             audiowrite(fullfile(cur_path,clean_fname),noisy,fs);
             
             names{speech_index} = clean_fname;
@@ -69,7 +71,7 @@ for n_index = 1:noise_count
 end
 toc
 
-data_type = 'test\';
+data_type = 'test';
 clean_file_names = fullfile(timit_f,data_type);
 clean_files = dir(fullfile(clean_file_names,'*.wav'));
 data_size = size(clean_files,1);
@@ -87,7 +89,7 @@ for n_index = 1:noise_count
     noise = audioread(fullfile(noises_f,noise_type));
 
     for SNR = -5:5:20
-        %loop = loop + 1;
+        %loop = loop + 1
         names = cell(test_size,1);
         seg_values = zeros(test_size,1);
         
@@ -98,11 +100,11 @@ for n_index = 1:noise_count
             clean_fname = clean_files(speech_index).name;
             [clean_speech,fs] = audioread(fullfile(timit_f,data_type,clean_fname));
         
-            [noisy, dontcare] = addnoise(clean_speech, noise, SNR);
+            [noisy, ~] = addnoise(clean_speech, noise, SNR);
             ssnr = segsnr(clean_speech, noisy, fs);
             %snr_this = snr_self(orinigal, noisy);
             %fprintf('SegSNR: %0.2f dB\n', ssnr);
-            cur_path = fullfile(result_f,data_type,noise_name,strcat(num2str(SNR),"dB"));
+            cur_path = fullfile(result_f,data_type,noise_name,strcat(num2str(SNR),'dB'));
             audiowrite(fullfile(cur_path,clean_fname),noisy,fs);
             
             names{count} = clean_fname;
@@ -113,9 +115,7 @@ for n_index = 1:noise_count
 end
 toc
 
-
 % num2str(j,'%02d')
-% 
 % 
 % [orinigal, fs] = audioread('sp10.wav');
 % [noise, fs] = audioread('ssn.wav');
