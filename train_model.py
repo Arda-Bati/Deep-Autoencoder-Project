@@ -3,9 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as func
 import torch.nn.init as torch_init
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms, utils
-from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
 import TIMIT_dataloader
 from tqdm import tqdm, tqdm_notebook
@@ -25,9 +22,9 @@ else: # Otherwise, train on the CPU
     extras = False
     print("CUDA NOT supported")
 
-train_loader = TIMIT_dataloader.prepareABC(batch_size=batch_size,
-                                           num_frames=num_frames,
-                                           extras=extras)
+train_loader = TIMIT_dataloader.prepareTIMIT_train(batch_size=batch_size,
+                                                   num_frames=num_frames,
+                                                   extras=extras)
 
 
 model = _
