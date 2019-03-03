@@ -19,7 +19,7 @@ class TIMITDataset(Dataset):
         self.data_dir = './dataset/train'
         self.data_info = pd.read_csv('./dataset/list.csv')
         self.data_filenames = self.data_info['filename']
-        self.noisetypes = {0: 'babble', 1: 'destroyerops',
+        self.noisetypes = {0: 'babble', 1: 'destroyerengine',
                            2: 'factory1', 3: 'hfchannel'}
         self.SNR = {0: '-5db', 1: '0db', 2: '5db',
                     3: '10db', 4: '15db', 5: '20db'}
@@ -30,9 +30,9 @@ class TIMITDataset(Dataset):
 
     def __getitem__(self, ind):
 
-        # spec_clean = np.load(os.path.join(self.data_dir,
-                                             # 'clean',
-                                             # self.data_filenames.ix[ind[0]]))
+        spec_clean = np.load(os.path.join(self.data_dir,
+                                             'clean',
+                                             self.data_filenames.ix[ind[0]] + '.npy'))
 
         spec_noisy = np.load(os.path.join(self.data_dir,
                                              'noisy',
@@ -40,11 +40,15 @@ class TIMITDataset(Dataset):
                                              self.SNR[ind[2]],
                                              self.data_filenames.ix[ind[0]] + '.npy'))
 
-        print(spec_noisy.shape)
-        input = spec_noisy[:, :, ind[3] - self.window_size: ind[3] + self.window_size + 1]
-        # target = spec_clean[:, ind[3]]
+        input = spec_noisy[:, ind[3] - self.window_size: ind[3] + self.window_size + 1]
+        target = spec_clean[:, ind[3]]
 
-        return input
+        input = torch.from_numpy(input)
+        input = input.contiguous().view(129 * (2 * self.window_size + 1))
+        target = torch.from_numpy(target)
+        target = target.contiguous().view(129)
+
+        return (input, target)
 
 
 def prepareTIMIT_train(batch_size = 1, num_frame = 11, extras={}):
@@ -77,10 +81,10 @@ def prepareTIMIT_train(batch_size = 1, num_frame = 11, extras={}):
     return train_loader
 
 if __name__ == '__main__':
-    train_loader = prepareTIMIT_train(batch_size=1,
+    train_loader = prepareTIMIT_train(batch_size=20,
                                       num_frame=11)
 
-    for minibatch_count, inputs in enumerate(tqdm(train_loader), 0):
+    for minibatch_count, (inputs, targets) in enumerate(tqdm(train_loader), 0):
         # print(inputs.shape)
         pass
 
