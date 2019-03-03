@@ -18,14 +18,18 @@ from scipy import signal
 from scipy.io import wavfile
 import pandas as pd
 clean_train_folder = r'F:\timit\train'
-noisy_train_folder=r'F:\ECE271B_Project\Noise_Addition\results\train'
-noisy_types=[r'\babble',r'\destroyerengine',r'\factory1',r'\hfchannel']
-SNRs=['\-5db','\0db','\5db','\10db','\15db','\20db']
+
+#noisy_types=[r'\babble',r'\destroyerengine',r'\factory1',r'\hfchannel']
+#SNRs=[r'\5db',r'\10db',r'\15db',r'\20db',r'\0db',r'\-5db']
+noisy_types=[r""]
+SNRs=[r""]
 noisy_train_folder = r'F:\ECE271B_Project\Noise_Addition\results\train'
+#to convert clean data
+noisy_train_folder = r'F:\timit\train'
 noisy_test_folder = r'F:\ECE271B_Project\Noise_Addition\results\test'
-clean_test_folder =r'F:\timit\test'
-noisy_test_folder =r'F:\test_results'
-serialized_train_folder = r'F:\train_np_results'
+clean_test_folder =r'F:\ECE271B_Project\Noise_Addition\results\test\babble\0db'
+#noisy_test_folder =r'F:\test_results'
+serialized_train_folder = r'F:\train_np_results_clean'
 serialized_test_folder = r'F:\test_np_results'
 window_size = 2 ** 14  # about 1 second of samples
 #sample_rate = 16000
@@ -52,7 +56,10 @@ def saveConvert(file):
     """
     sample_rate, samples = wavfile.read(file)
     x=scipy.signal.stft(samples,sample_rate)
-    return [x[2]]
+    D_a = np.abs(x[2])
+
+    D_db = librosa.core.amplitude_to_db(D_a, ref=np.max)
+    return D_db
 
 
 max_idxs=[]
@@ -64,7 +71,7 @@ def process_and_serialize(data_type):
         for noise in noisy_types:
             
             stride = 0.5
-            #max_idxs=[]
+            max_idxs=[]
             if data_type == 'train':
                 clean_folder = clean_train_folder
                 noisy_folder = noisy_train_folder+noise+snr
@@ -98,7 +105,7 @@ def process_and_serialize(data_type):
             
                     np.save(os.path.join(serialized_folder, '{}'.format(filename)), arr=converted_noisy)
                     #np.save(os.path.join(serialized_test_folder, '{}'.format(filename)), arr=converted_noisy)
-                    max_idxs.append((filename,converted_noisy[0].shape[1]))
+                    max_idxs.append((filename,converted_noisy.shape[1]))
             #np.save(os.path.join(serialized_test_folder, '{}'.format('idxs')), arr=np.array(max_idxs))
             df = pd.DataFrame(max_idxs, columns=["filename","max_idx"])
             df.to_csv('list.csv', index=False)
@@ -124,5 +131,5 @@ def data_verify(data_type):
 if __name__ == '__main__':
     process_and_serialize('train')
     #data_verify('train')
-    process_and_serialize('test')
+    #process_and_serialize('test')
     #data_verify('test')

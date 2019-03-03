@@ -6,9 +6,10 @@ import torch.optim as optim
 import numpy as np
 import TIMIT_dataloader
 from tqdm import tqdm, tqdm_notebook
+from Model import autoencoder
 
 num_epochs = 10           # Number of full passes through the dataset
-batch_size = 20          # Number of samples in each minibatch
+batch_size = 100          # Number of samples in each minibatch
 num_frame = 11
 use_cuda = torch.cuda.is_available()
 
@@ -23,11 +24,16 @@ else: # Otherwise, train on the CPU
     print("CUDA NOT supported")
 
 train_loader = TIMIT_dataloader.prepareTIMIT_train(batch_size=batch_size,
+<<<<<<< HEAD
                                                    num_frames=num_frames,
                                                    extras=extras)
+=======
+                                           num_frame=num_frame,
+                                           extras=False)
+>>>>>>> 0ce316703ed2a1a6bcd001a6ba7b6500e02d5eac
 
-
-model = _
+print('train_loader complete')
+model = autoencoder().cuda()
 model = model.to(computing_device)
 print("Model on CUDA?", next(model.parameters()).is_cuda)
 
@@ -38,21 +44,27 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 loss_list = []
 
-for epoch in tqdm(range(num_epochs)):
+for epoch in range(num_epochs):
 
     N = 50
     # Get the next minibatch of images, labels for training
-    for minibatch_count, (inputs, targets) in enumerate(train_loader, 0):
+    #for minibatch_count, (inputs,target) in enumerate(tqdm(train_loader), 0):
+    for minibatch_count, (inputs, target) in enumerate(tqdm(train_loader), 0):
+        #print(inputs.shape)
+        #print(inputs)
+        #print(target.shape)
+        #inputs=torch.from_numpy(inputs)
+        #target=torch.from_numpy(target)
 
         # Put the minibatch data in CUDA Tensors and run on the GPU if supported
-        inputs, targets = inputs.to(computing_device), targets.to(computing_device)
+        inputs, target = inputs.to(computing_device), target.to(computing_device)
 
         # Zero out the stored gradient (buffer) from the previous iteration
         optimizer.zero_grad()
 
         # Perform the forward pass through the network and compute the loss
         outputs = model(inputs)
-        loss = criterion(outputs, targets)
+        loss = criterion(outputs, target)
 
         # Automagically compute the gradients and backpropagate the loss through the network
         loss.backward()
@@ -64,7 +76,7 @@ for epoch in tqdm(range(num_epochs)):
         loss_list.append(loss)
 
         if minibatch_count % N == 0:
-            print('Epoch {}, Minibatch {}, Training Loss {}'.format(epoch_num, minibatch_count, loss))
+            print('Epoch {}, Minibatch {}, Training Loss {}'.format(epoch, minibatch_count, loss))
 
     print("Finished", epoch, "epochs of training")
 print("Training complete after", epoch, "epochs")
