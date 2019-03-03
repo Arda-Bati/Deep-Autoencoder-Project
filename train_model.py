@@ -8,9 +8,11 @@ from torchvision import transforms, utils
 from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
 import TIMIT_dataloader
-from tqdm import tqdm, tqdm_notebook
-from Model import autoencoder
+from datetime import datetime
 
+from tqdm import tqdm
+from Model import autoencoder
+import json
 num_epochs = 10           # Number of full passes through the dataset
 batch_size = 100          # Number of samples in each minibatch
 num_frame = 11
@@ -42,20 +44,25 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 loss_list = []
 
+def write_event(log, step: int, **data):
+    data['step'] = step
+    data['dt'] = datetime.now().isoformat()
+    log.write(json.dumps(data, sort_keys=True))
+    log.write('\n')
+    log.flush()
+log = open('loss_train.log'.format(fold=1),'at', encoding='utf8')
+
 for epoch in range(num_epochs):
 
     N = 50
     # Get the next minibatch of images, labels for training
     #for minibatch_count, (inputs,target) in enumerate(tqdm(train_loader), 0):
     for minibatch_count, (inputs, target) in enumerate(tqdm(train_loader), 0):
-        #print(inputs.shape)
-        #print(inputs)
-        #print(target.shape)
-        #inputs=torch.from_numpy(inputs)
-        #target=torch.from_numpy(target)
+
 
         # Put the minibatch data in CUDA Tensors and run on the GPU if supported
         inputs, target = inputs.to(computing_device), target.to(computing_device)
+        #print(type(inputs))
 
         # Zero out the stored gradient (buffer) from the previous iteration
         optimizer.zero_grad()
@@ -71,10 +78,18 @@ for epoch in range(num_epochs):
         optimizer.step()
 
         # Add this iteration's loss to the total_loss
-        loss_list.append(loss)
+        
 
         if minibatch_count % N == 0:
+          
+            write_event(log,minibatch_count,loss=float(loss.data.item()))
+
+            #loss_list.append(loss.data.item())
             print('Epoch {}, Minibatch {}, Training Loss {}'.format(epoch, minibatch_count, loss))
+            #print('target',target)
+            #print('output',outputs)
+  
 
     print("Finished", epoch, "epochs of training")
+    torch.save(model, "./encoder.pt")
 print("Training complete after", epoch, "epochs")

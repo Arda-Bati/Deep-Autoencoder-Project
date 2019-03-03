@@ -1,0 +1,2 @@
+tensor(1.0799, device='cuda:0', grad_fn=<MseLossBackward>)Minibatch 0tensor(0.7216, device='cuda:0', grad_fn=<MseLossBackward>)Minibatch 50tensor(0.7163, device='cuda:0', grad_fn=<MseLossBackward>)Minibatch 100_fn=<MseLossBackward>){"dt": "2019-03-02T19:46:52.905808", "loss": 1.0768009424209595, "step": 0}
+{"dt": "2019-03-02T19:47:14.318622", "loss": 0.7398936748504639, "step": 50}

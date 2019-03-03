@@ -22,19 +22,49 @@ class autoencoder(nn.Module):
     def __init__(self):
         super(autoencoder, self).__init__()
         self.encoder = nn.Sequential(
-            nn.Linear(11*129, 128),
-            nn.ReLU(True),
-            nn.Linear(128, 64),
-            nn.ReLU(True), nn.Linear(64, 12), nn.ReLU(True), nn.Linear(12, 3))
+            nn.Linear(11*129, 1024),
+            nn.Sigmoid(),
+            nn.Linear(1024, 512),
+            nn.Sigmoid(),
+            nn.Linear(512,256))
+        
+            #nn.ReLU(True), nn.Linear(64, 12), nn.ReLU(True), nn.Linear(12, 3))
         self.decoder = nn.Sequential(
-            nn.Linear(3, 12),
-            nn.ReLU(True),
-            nn.Linear(12, 64),
-            nn.ReLU(True),
-            nn.Linear(64, 128),
-            nn.ReLU(True), nn.Linear(128, 11*129), nn.Tanh())
+            #nn.Linear(3, 12),
+            #nn.ReLU(True),
+            #nn.Linear(12, 64),
+            #nn.ReLU(True),
+            nn.Linear(256,512),
+            nn.Sigmoid(),
+            nn.Linear(512, 1024),
+            nn.Sigmoid(), nn.Linear(1024, 11*129))
 
     def forward(self, x):
         x = self.encoder(x)
         x = self.decoder(x)
+        return x
+    
+class NetWork(nn.Module):
+    def __init__(self):
+        super(autoencoder, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(11*129, 1024),
+            nn.Sigmoid(),
+            nn.Linear(1024, 512),
+            nn.Sigmoid(),
+            nn.Linear(512,256))
+        
+            #nn.ReLU(True), nn.Linear(64, 12), nn.ReLU(True), nn.Linear(12, 3))
+        self.last = nn.Sequential(
+            #nn.Linear(3, 12),
+            #nn.ReLU(True),
+            #nn.Linear(12, 64),
+            #nn.ReLU(True),
+            nn.Sigmoid(),
+            nn.Linear(256,129))
+            
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.last(x)
         return x
