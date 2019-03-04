@@ -35,13 +35,13 @@ train_loader = TIMIT_dataloader.prepareTIMIT_train(batch_size=batch_size,
 
 print('train_loader complete')
 #if training the auto encoder
-#model = autoencoder().cuda()
+model = autoencoder().cuda()
 #if training the final network
-pre_model=torch.load('encoder.pt')
+#pre_model=torch.load('encoder.pt')
 
-model = NetWork()
+#model = NetWork()
 #load pretrained encoder weights into the new network
-model.encoder=pre_model.encoder
+#model.encoder=pre_model.encoder
 model = model.to(computing_device)
 print("Model on CUDA?", next(model.parameters()).is_cuda)
 
@@ -91,7 +91,7 @@ for epoch in range(num_epochs):
         #print('output_size',outputs.shape)
         #print('input_size',inputs.shape)
         #print('target_size',target.shape)
-        loss = criterion(outputs, target)
+        loss = criterion(outputs, inputs)
 
         # Automagically compute the gradients and backpropagate the loss through the network
         loss.backward()

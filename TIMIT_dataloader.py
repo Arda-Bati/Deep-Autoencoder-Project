@@ -40,9 +40,6 @@ class TIMITDataset(Dataset):
 
     def __getitem__(self, ind):
 
-
-
-
    
         spec_clean = np.load(os.path.join(self.clean_data_dir,
                                              self.data_filenames.ix[ind[0]]+r'.npy'))
@@ -70,8 +67,6 @@ class TIMITDataset(Dataset):
 
         
         return input,target
-
-
 
 def prepareTIMIT_train(batch_size = 1, num_frame = 11, extras={}):
 

@@ -22,11 +22,11 @@ class autoencoder(nn.Module):
     def __init__(self):
         super(autoencoder, self).__init__()
         self.encoder = nn.Sequential(
-            nn.Linear(11*129, 1024),
+            nn.Linear(11*129, 2048),
             nn.Sigmoid(),
-            nn.Linear(1024, 512),
+            nn.Linear(2048, 3072),
             nn.Sigmoid(),
-            nn.Linear(512,256))
+            nn.Linear(3072,2048))
         
             #nn.ReLU(True), nn.Linear(64, 12), nn.ReLU(True), nn.Linear(12, 3))
         self.decoder = nn.Sequential(
@@ -34,10 +34,9 @@ class autoencoder(nn.Module):
             #nn.ReLU(True),
             #nn.Linear(12, 64),
             #nn.ReLU(True),
-            nn.Linear(256,512),
-            nn.Sigmoid(),
-            nn.Linear(512, 1024),
-            nn.Sigmoid(), nn.Linear(1024, 11*129))
+            nn.Linear(2048,3072),
+            nn.Linear(3072, 2048),
+            nn.Linear(2048, 11*129))
 
     def forward(self, x):
         x = self.encoder(x)
