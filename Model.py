@@ -46,7 +46,7 @@ class autoencoder(nn.Module):
     
 class NetWork(nn.Module):
     def __init__(self):
-        super(autoencoder, self).__init__()
+        super(NetWork, self).__init__()
         self.encoder = nn.Sequential(
             nn.Linear(11*129, 1024),
             nn.Sigmoid(),
@@ -60,11 +60,16 @@ class NetWork(nn.Module):
             #nn.ReLU(True),
             #nn.Linear(12, 64),
             #nn.ReLU(True),
-            nn.Sigmoid(),
-            nn.Linear(256,129))
+            #nn.Sigmoid(),
+            #nn.Linear(256,200),
+            #nn.Sigmoid(),
+            nn.Linear(256,129)
+            
+            )
             
 
     def forward(self, x):
         x = self.encoder(x)
+        #print(x)
         x = self.last(x)
         return x

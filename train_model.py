@@ -3,12 +3,16 @@ import torch.nn as nn
 import torch.nn.functional as func
 import torch.nn.init as torch_init
 import torch.optim as optim
+from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms, utils
+from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
 import TIMIT_dataloader
 from datetime import datetime
 
 from tqdm import tqdm
 from Model import autoencoder
+from Model import NetWork
 import json
 num_epochs = 10           # Number of full passes through the dataset
 batch_size = 100          # Number of samples in each minibatch
@@ -26,18 +30,27 @@ else: # Otherwise, train on the CPU
     print("CUDA NOT supported")
 
 train_loader = TIMIT_dataloader.prepareTIMIT_train(batch_size=batch_size,
-<<<<<<< HEAD
-                                                   num_frames=num_frames,
-                                                   extras=extras)
-=======
                                            num_frame=num_frame,
                                            extras=False)
->>>>>>> 0ce316703ed2a1a6bcd001a6ba7b6500e02d5eac
 
 print('train_loader complete')
-model = autoencoder().cuda()
+#if training the auto encoder
+#model = autoencoder().cuda()
+#if training the final network
+pre_model=torch.load('encoder.pt')
+
+model = NetWork()
+#load pretrained encoder weights into the new network
+model.encoder=pre_model.encoder
 model = model.to(computing_device)
 print("Model on CUDA?", next(model.parameters()).is_cuda)
+
+
+"""
+#if freeze previous layers
+for param in model.encoder.parameters():
+    param.requires_grad=False
+"""
 
 criterion = nn.MSELoss()
 
@@ -52,7 +65,7 @@ def write_event(log, step: int, **data):
     log.write(json.dumps(data, sort_keys=True))
     log.write('\n')
     log.flush()
-log = open('loss_train.log'.format(fold=1),'at', encoding='utf8')
+log = open('loss_train_network.log'.format(fold=1),'at', encoding='utf8')
 
 for epoch in range(num_epochs):
 
@@ -71,6 +84,13 @@ for epoch in range(num_epochs):
 
         # Perform the forward pass through the network and compute the loss
         outputs = model(inputs)
+        #print('outputs,',outputs)
+        #print('last wrights',model.last[0].weight)
+        #print('target',target)
+        #print('output',outputs)
+        #print('output_size',outputs.shape)
+        #print('input_size',inputs.shape)
+        #print('target_size',target.shape)
         loss = criterion(outputs, target)
 
         # Automagically compute the gradients and backpropagate the loss through the network
