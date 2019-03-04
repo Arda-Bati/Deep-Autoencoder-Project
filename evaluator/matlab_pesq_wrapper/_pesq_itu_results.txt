@@ -1,0 +1,4 @@
+REFERENCE	 DEGRADED	 PESQMOS	 PESQMOS	 SUBJMOS	 COND	 SAMPLE_FREQ	 CRUDE_DELAY
+speech.wav	 speech_bab_0dB.wav	 SQValue=1.499	 1.499	 0.000	 0	 8000	0.0000
+ speech.wav	 speech_bab_0dB.wav	 SQValue=1.499	 1.499	 0.000	 0	 8000	0.0000
+ 
