@@ -3,9 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as func
 import torch.nn.init as torch_init
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms, utils
-from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
 import TIMIT_dataloader
 from datetime import datetime
@@ -29,8 +26,13 @@ else: # Otherwise, train on the CPU
     print("CUDA NOT supported")
 
 train_loader = TIMIT_dataloader.prepareTIMIT_train(batch_size=batch_size,
+<<<<<<< HEAD
+                                                   num_frames=num_frames,
+                                                   extras=extras)
+=======
                                            num_frame=num_frame,
                                            extras=False)
+>>>>>>> 0ce316703ed2a1a6bcd001a6ba7b6500e02d5eac
 
 print('train_loader complete')
 model = autoencoder().cuda()

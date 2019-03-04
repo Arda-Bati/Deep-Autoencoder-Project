@@ -25,6 +25,7 @@ class TIMITDataset(Dataset):
         self.data_info = pd.read_csv(r'F:\ECE271B_Project\Noise_Addition\timit_128\timit\list.csv')
         self.data_filenames = self.data_info['filename']
 
+
         self.noisetypes = {0: r'babble', 1: r'destroyerengine',
                            2: r'factory1', 3: r'hfchannel'}
         self.SNR = {0: r'-5db', 1: r'0db', 2: r'5db',
@@ -38,28 +39,38 @@ class TIMITDataset(Dataset):
         return (data-np.mean(data))/np.std(data)
 
     def __getitem__(self, ind):
-        
+
+
+
+
    
         spec_clean = np.load(os.path.join(self.clean_data_dir,
-                                             'clean',
                                              self.data_filenames.ix[ind[0]]+r'.npy'))
-        
+
 
         spec_noisy = np.load(os.path.join(self.noisy_data_dir,
+
                                              self.noisetypes[ind[1]],
                                              self.SNR[ind[2]],
                                              self.data_filenames.ix[ind[0]] +r'.npy'))
+        where_are_NaNs = np.isnan(spec_clean)
+        spec_clean[where_are_NaNs] = 0
+
 
         #print(spec_noisy.shape)
-        #print(spec_clean.shape)
+        #print('spec_clean.shape:',spec_clean.shape)
         input = spec_noisy[:, ind[3] - self.window_size: ind[3] + self.window_size + 1]
         target = spec_clean[:, ind[3]]
         
         input=np.reshape(input,(input.size))
         target=np.reshape(target,(target.size))
-        #output=self.normalize(input)
-        #return output,output if training auto encoder decoder
+        #input=self.normalize(input)
+        #target=self.normalize(target)
+        #return input,input if training auto encoder decoder
+
+        
         return input,target
+
 
 
 def prepareTIMIT_train(batch_size = 1, num_frame = 11, extras={}):
@@ -92,14 +103,10 @@ def prepareTIMIT_train(batch_size = 1, num_frame = 11, extras={}):
     return train_loader
 
 if __name__ == '__main__':
-    train_loader = prepareTIMIT_train(batch_size=1,
+    train_loader = prepareTIMIT_train(batch_size=20,
                                       num_frame=11)
-    """
-    for minibatch_count, (inputs,target) in enumerate(tqdm(train_loader), 0):
-        #print(inputs.shape)
-        print(target.shape)
-        
-    
-    print(inputs.shape)
-    """
-# print(targets.shape)
+
+    for minibatch_count, (inputs, targets) in enumerate(tqdm(train_loader), 0):
+        pass
+        # print(inputs.shape)
+        #print(np.sum(np.isnan(targets.numpy())))
