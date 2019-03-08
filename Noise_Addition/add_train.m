@@ -2,9 +2,9 @@
 clc
 clear
 result_f = 'results';
-noises_f = 'noises';
+noises_f = 'noises_train';
 %timit_f = fullfile('timit_512','timit_64');
-timit_f = fullfile('timit_128','timit');
+timit_f = './timit_128'
 fs = 8000;
 
 mkdir results
@@ -40,7 +40,7 @@ data_size = size(clean_files,1);
 
 loop = 0;
 tic
-for n_index = 1:noise_count
+parfor n_index = 1:noise_count
     
     noise_type = noise_types{n_index};
     noise_name = noise_type(1:(size(noise_type,2)-4));

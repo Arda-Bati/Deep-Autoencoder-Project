@@ -2,9 +2,9 @@
 clc
 clear all
 result_f = 'results';
-noises_f = 'noises';
+noises_f = 'noises_test';
 %timit_f = 'timit_512\timit_64\';
-timit_f = 'timit_128/timit';
+timit_f = 'timit_128';
 fs = 8000;
 
 mkdir results
@@ -31,10 +31,10 @@ for n_index = 1:(noise_count)
     end
 end
 % 
-data_type = 'train';
-clean_file_names = fullfile(timit_f,data_type);
-clean_files = dir(fullfile(clean_file_names,'*.wav'));
-data_size = size(clean_files,1);
+% data_type = 'train';
+% clean_file_names = fullfile(timit_f,data_type);
+% clean_files = dir(fullfile(clean_file_names,'*.wav'));
+% data_size = size(clean_files,1);
 
 % loop = 0;
 % tic
@@ -80,7 +80,7 @@ speech_indices = sort(speech_indices);
 
 loop = 0;
 tic
-for n_index = 1:noise_count
+parfor n_index = 1:noise_count
     
     noise_type = noise_types{n_index};
     noise_name = noise_type(1:(size(noise_type,2)-4));
