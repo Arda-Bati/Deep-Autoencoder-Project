@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import numpy as np
+from AE import AE
 from TIMIT_dataloader_DAE import prepareTIMIT_train
 from tqdm import tqdm, tqdm_notebook
 
@@ -36,46 +37,6 @@ train_loader, val_loader = prepareTIMIT_train(batch_size = batch_size,
                                               extras=extras)
 
 
-# In[3]:
-
-
-class AE(nn.Module):
-    
-    def __init__(self, 
-                 input_size, 
-                 hidden_size, 
-                 num_layers = 1, 
-                 tied = True,
-                 batch_normalization = False):
-        
-        super(AE, self).__init__()
-        
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        self.num_layers = num_layers
-        self.tied = tied
-        self.batch_normalization = batch_normalization
-        
-        self.W1 = nn.Parameter(torch.randn(hidden_size, input_size) * 0.1)
-        self.W2 = nn.Parameter(torch.randn(input_size, hidden_size) * 0.1)
-        self.b = nn.Parameter(torch.randn(hidden_size) * 0.01)
-        self.c = nn.Parameter(torch.randn(input_size) * 0.01)
-        
-        self.normed = nn.BatchNorm1d(hidden_size)
-    
-    def forward(self, batch):
-        
-        for i in range(self.num_layers):
-            batch = F.linear(batch, self.W1, bias = self.b)
-#             if self.batch_normalization:
-            batch = self.normed(batch)
-            batch = F.sigmoid(batch)
-            # if self.tied:
-            batch = F.linear(batch, weight = self.W1.t(), bias = self.c)
-            # else:
-                # batch = F.linear(batch, weight = self.W2, bias = self.c)
-        
-        return batch
 
 
 # In[4]:
@@ -90,7 +51,7 @@ model = AE(input_size = input_size,
            hidden_size = hidden_size,
            num_layers = num_layers,
            tied = True,
-           batch_normalization = False)
+           layer_normalization = True)
 model = model.to(computing_device)
 
 criterion = nn.MSELoss()
@@ -116,7 +77,7 @@ def validate(model, criterion, val_loader):
         model.eval()
         for minibatch_count, (input, target) in enumerate(val_loader, 0):
 
-            batch_size, _  = input.shape
+            batch_size, num_features  = input.shape
             
             input = input.float()
             target = target.float()
@@ -129,7 +90,7 @@ def validate(model, criterion, val_loader):
             loss = criterion(output, target)
 
             full_val_loss += loss
-            count += batch_size
+            count += (batch_size * num_features)
     
     avg_loss = full_val_loss / count
     scheduler.step(avg_loss)
@@ -173,7 +134,7 @@ for epoch_number in range(epochs_number):
             print('epoch: {}. Minibatch: {}. Training loss: {}.'.format(epoch_number, 
                                                                         minibatch_count,
                                                                         loss))
-            if minibatch_count % (10 * N) == 0:
+            if minibatch_count % (100 * N) == 0:
                 current_val_loss = validate(model, criterion_val, val_loader)
                 print('Val loss: {}'.format(current_val_loss))
                 val_loss_list.append(current_val_loss)
