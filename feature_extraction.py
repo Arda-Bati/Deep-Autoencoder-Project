@@ -113,7 +113,6 @@ def processData(data_type):
     """
     Serialize, down-sample the sliced signals and save on separate folder.
     """
-    mean=np.array([])
     count=0
 
     #Generate features for clean data
@@ -131,6 +130,9 @@ def processData(data_type):
                     max_indices.append((filename, data.shape[1]))
         df = pd.DataFrame(max_indices, columns=["filename","max_idx"])
         df.to_csv(os.path.join(output_folder, 'list.csv'), index=False)
+    
+    num_features, _ = data.shape
+    mean = np.zeros([num_features, 1])
     
     for snr in SNRs:
         for noise in noisy_types:
@@ -160,10 +162,7 @@ def processData(data_type):
                         #get the mean
                         if data_type == 'train':
                             converted_noisy=saveConvert_data(noisy_file)
-                            if len(mean) == 0:
-                                mean = np.sum(converted_noisy,axis=1)
-                            else:
-                                mean += np.sum(converted_noisy,axis=1)
+                            mean += np.sum(converted_noisy,axis=1).reshape(-1, 1)
 
                             count += len(converted_noisy[0])
 
@@ -191,16 +190,18 @@ def get_std(data_type):
     count=0
     for snr in SNRs:
         for noise in noisy_types:
-            #max_idxs=[]
             
             if data_type == 'train':
                 clean_folder = clean_train_folder
-                noisy_folder = noisy_train_folder+noise+snr
-                serialized_folder = output_train_folder+noise+snr
+                noisy_folder = os.path.join(noisy_train_folder, noise, snr)
+                serialized_folder = os.path.join(output_train_folder, noise, snr)
+                
+                if noise in test_noisy_types:
+                    continue
             else:
                 clean_folder = clean_test_folder
-                noisy_folder = noisy_test_folder+noise+snr
-                serialized_folder = output_test_folder+noise+snr
+                noisy_folder = os.path.join(noisy_test_folder, noise, snr)
+                serialized_folder = os.path.join(output_test_folder, noise, snr)
             if not os.path.exists(serialized_folder):
                 os.makedirs(serialized_folder)
             
@@ -241,10 +242,7 @@ def get_std(data_type):
                         converted_noisy=saveConvert_data(noisy_file)
                         
                         #get the mean
-                        if len(std)==0:
-                            std=np.sum((converted_noisy-mean)**2,axis=1)
-                        else:
-                            std+=np.sum((converted_noisy-mean)**2,axis=1)
+                        std += np.sum((converted_noisy-mean)**2,axis=1).reshape(-1, 1)
                         
                         count+=len(converted_noisy[0])
                             
@@ -257,11 +255,10 @@ def get_std(data_type):
                     #print(np.sum(np.isnan(converted_noisy)))
                     #max_idxs.append((filename,converted_noisy.shape[1]))
     std = std / count
-    np.save('std.npy',std)
+    np.save('std.npy',std ** 0.5)
 
 
 if __name__ == '__main__':
     processData('train')
-    processData('test')
     get_std('train')
 
