@@ -98,8 +98,9 @@ def prepareTIMIT_train(batch_size = 1,
         np.random.seed(seed)
         np.random.shuffle(all_indices)
 
-    val_split = 100
-    train_ind, val_ind = all_indices[val_split :], all_indices[: val_split]
+    train_split = 800
+    val_split = 50
+    train_ind, val_ind = all_indices[val_split : val_split + train_split], all_indices[: val_split]
     
     train_indices = []
     for i in train_ind:
