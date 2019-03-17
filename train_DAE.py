@@ -134,7 +134,7 @@ for epoch_number in range(epochs_number):
             print('epoch: {}. Minibatch: {}. Training loss: {}.'.format(epoch_number, 
                                                                         minibatch_count,
                                                                         loss))
-            if minibatch_count % (100 * N) == 0 and minibatch_count != 0:
+            if minibatch_count % (20 * N) == 0 and minibatch_count != 0:
                 current_val_loss = validate(model, criterion_val, val_loader)
                 print('Val loss: {}'.format(current_val_loss))
                 val_loss_list.append(current_val_loss)
