@@ -261,6 +261,6 @@ def get_std(data_type):
 
 if __name__ == '__main__':
     # processData('train')
-    # processData('test')
-    get_std('train')
+    processData('test')
+    # get_std('train')
 
