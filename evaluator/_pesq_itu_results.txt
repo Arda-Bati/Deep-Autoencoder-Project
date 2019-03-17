@@ -1,0 +1,18 @@
+REFERENCE	 DEGRADED	 PESQMOS	 PESQMOS	 SUBJMOS	 COND	 SAMPLE_FREQ	 CRUDE_DELAY
+../features/pred/babble/0dB/DR1_MREB0_SX205.wav	 ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 SQValue=-0.321	 -0.321	 0.000	 0	 8000	0.2120
+ ../features/test_wav/babble/0dB/DR1_MREB0_SX205.wav	 ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 SQValue=1.065	 1.065	 0.000	 0	 8000	0.0000
+ ../features/test_wav/babble/0dB/DR1_MREB0_SX205.wav	 ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 SQValue=1.065	 1.065	 0.000	 0	 8000	0.0000
+ ../features/pred/babble/0dB/DR1_MREB0_SX205.wav	 ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 SQValue=-0.321	 -0.321	 0.000	 0	 8000	0.2120
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../features/pred/babble/0dB/DR1_MREB0_SX205.wav	 SQValue=0.591	 0.591	 0.000	 0	 8000	-0.2120
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../features/pred/babble/0dB/DR1_MREB0_SX205.wav	 SQValue=0.591	 0.591	 0.000	 0	 8000	-0.2120
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../features/test_wav/babble/0dB/DR1_MREB0_SX205.wav	 SQValue=1.923	 1.923	 0.000	 0	 8000	0.0000
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=0.542	 0.542	 0.000	 0	 8000	3.7160
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ 
