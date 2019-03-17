@@ -8,15 +8,15 @@ from tqdm import tqdm
 num_frames = 11
 window_size = num_frames // 2
 fs = 8000
-n_fft = 256
+n_fft = 128
 
-root_dir = './dataset/test'
-model_fn = './Models/network.pt'
+root_dir = './features'
+model_fn = './saved_model/DAE.pt'
 
 noise_types = ['babble', 'destroyerengine',
-               'factory1', 'hfchannel', 'white', 'pink']
-SNRs = ['-5db', '0db', '5db',
-        '10db', '15db', '20db']
+               'alarm', 'volvo', 'white', 'pink']
+SNRs = ['-5dB', '0dB', '5dB',
+        '10dB', '15dB', '20dB']
 
 # Check if your system supports CUDA
 use_cuda = torch.cuda.is_available()
@@ -36,20 +36,21 @@ model = torch.load(model_fn)
 model = model.cpu()
 # model = model.to(computing_device)
 
+mean = np.load('./mean.npy')
+std = np.load('./std.npy')
+
 with torch.no_grad():
     for snr in SNRs:
         for noise_type in noise_types:
-            noisy_dir = os.path.join(root_dir, 'noisy_normalized', noise_type, snr)
+            noisy_dir = os.path.join(root_dir, 'test', noise_type, snr)
             print(noisy_dir)
             for root, dirs, files in os.walk(noisy_dir):
                 for fn in tqdm(files):
                     fn_base = fn.split('.')[0]
                     audioinfo = np.load(os.path.join(root, fn))
-                    data = audioinfo[()]['data']
-                    D_p = audioinfo[()]['phase']
-                    mean = audioinfo[()]['mean']
-                    std = audioinfo[()]['std']
-                    max_value = audioinfo[()]['max_value']
+                    data = audioinfo.item()['data']
+                    D_p = audioinfo.item()['phase']
+                    max_value = audioinfo.item()['max_value']
                     # print(data.shape)
                     # print(mean.shape)
                     # print(std.shape)
@@ -57,20 +58,20 @@ with torch.no_grad():
                     # print(max_value)
 
                     _, length = data.shape
-                    data = torch.tensor(data)
+                    data = (data - mean) / std
+                    data = torch.tensor(data).float()
                     data_pred = torch.zeros(data.shape)
-                    for i in range(window_size, length - window_size):
-                        data_in = data[:, i - window_size: i + window_size + 1].contiguous().view(1419)
-                        data_pred[:, i] = model(data_in)
+                    for i in range(window_size, length - window_size, num_frames):
+                        data_in = data[:, i - window_size: i + window_size + 1].contiguous().view(1, -1)
+                        data_pred[:, i - window_size: i + window_size + 1] = model(data_in).view(-1, num_frames)
 
                     data_pred = data_pred.numpy()
                     data_pred = data_pred[:, window_size: length - window_size]
                     D_p = D_p[:, window_size: length - window_size]
-                    data_pred = data_pred * std.reshape(-1, 1) + mean.reshape(-1, 1)
+                    data_pred = data_pred * std + mean
                     D_a = librosa.core.db_to_amplitude(data_pred, ref=max_value)
                     D = D_a * (np.cos(D_p) + 1j * np.sin(D_p))
 
-                    _, y_pred = scipy.signal.istft(D, fs=fs)
-                    y_pred = y_pred / np.max(np.abs(y_pred))
-                    out_fn = os.path.join(root_dir, 'noisy_pred', noise_type, snr, fn_base + '.wav')
-                    scipy.io.wavfile.write(out_fn, rate=fs, data=y_pred)
+                    y_pred = librosa.istft(D)
+                    out_fn = os.path.join(root_dir, 'pred', noise_type, snr, fn_base + '.wav')
+                    librosa.output.write_wav(out_fn, y_pred, fs)
