@@ -80,7 +80,7 @@ def saveConvert_info(file):
     #sample_rate, samples = wavfile.read(file)
     #x=scipy.signal.stft(samples,sample_rate)
     D_a = np.abs(D)
-    D_db = librosa.core.amplitude_to_db(D_a, ref=np.max)
+    D_db = librosa.core.amplitude_to_db(D_a, ref=1)
     phase=np.angle(D)
     max_value=np.max(D_a)
     return [D_db, phase, max_value]
@@ -93,7 +93,7 @@ def saveConvert_data(file):
     D = librosa.core.stft(y, n_fft = 128)
     D_a = np.abs(D)
 
-    D_db = librosa.core.amplitude_to_db(D_a, ref=np.max)
+    D_db = librosa.core.amplitude_to_db(D_a, ref=1)
     return D_db
     
 
@@ -131,8 +131,8 @@ def processData(data_type):
         df = pd.DataFrame(max_indices, columns=["filename","max_idx"])
         df.to_csv(os.path.join(output_folder, 'list.csv'), index=False)
     
-    num_features, _ = data.shape
-    mean = np.zeros([num_features, 1])
+        num_features, _ = data.shape
+        mean = np.zeros([num_features, 1])
     
     for snr in SNRs:
         for noise in noisy_types:
@@ -174,9 +174,10 @@ def processData(data_type):
                             data_info['phase'] = phase
                             data_info['max_value'] = max_value
                             np.save(os.path.join(serialized_folder, '{}'.format(filename)), arr=data_info)
-                            
-    mean = mean / count
-    np.save('mean.npy',mean)
+            
+    if data_type == 'train':
+        mean = mean / count
+        np.save('mean.npy',mean)
             
 
 
@@ -259,6 +260,7 @@ def get_std(data_type):
 
 
 if __name__ == '__main__':
-    processData('train')
+    # processData('train')
+    # processData('test')
     get_std('train')
 
