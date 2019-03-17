@@ -12,7 +12,7 @@ fs = 8000
 n_fft = 128
 
 root_dir = './features'
-model_fn = './saved_model/DAE.pt'
+model_fn = './saved_model/DAE_h800.pt'
 
 noise_types = ['babble', 'destroyerengine',
                'alarm', 'volvo', 'white', 'pink']
@@ -34,7 +34,7 @@ else: # Otherwise, train on the CPU
 
 
 model = torch.load(model_fn)
-model = model.cpu()
+# model = model.cpu()
 # model = model.to(computing_device)
 
 mean = np.load('./mean.npy')
@@ -60,13 +60,13 @@ with torch.no_grad():
 
                     _, length = data.shape
                     data = (data - mean) / std
-                    data = torch.tensor(data).float()
-                    data_pred = torch.zeros(data.shape)
+                    data = torch.tensor(data).float().to(computing_device)
+                    data_pred = torch.zeros(data.shape).to(computing_device)
                     for i in range(window_size, length - window_size, num_frames):
                         data_in = data[:, i - window_size: i + window_size + 1].contiguous().view(1, -1)
                         data_pred[:, i - window_size: i + window_size + 1] = model(data_in).view(-1, num_frames)
 
-                    data_pred = data_pred.numpy()
+                    data_pred = data_pred.cpu().numpy()
                     data_pred = data_pred[:, : length - window_size]
                     D_p = D_p[:, : length - window_size]
                     data_pred = data_pred * std + mean

@@ -41,5 +41,6 @@ end
 
 disp(count);
 disp(pesq);
+disp(pesq ./ (1200 - count));
 
 end
