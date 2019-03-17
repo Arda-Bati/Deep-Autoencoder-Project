@@ -25,6 +25,7 @@ class AE(nn.Module):
         self.W2 = nn.Parameter(torch.randn(input_size, hidden_size) * 0.1)
         self.b = nn.Parameter(torch.randn(hidden_size) * 0.01)
         self.c = nn.Parameter(torch.randn(input_size) * 0.01)
+        self.slope = nn.Parameter(torch.randn(1))
         
         self.normed = nn.LayerNorm(hidden_size)
     
@@ -34,7 +35,8 @@ class AE(nn.Module):
             batch = F.linear(batch, self.W1, bias = self.b)
             if self.layer_normalization:
                 batch = self.normed(batch)
-                batch = F.sigmoid(batch)
+            batch = F.prelu(batch, self.slope)
+            # batch = torch.sigmoid(batch)
             if self.tied:
                 batch = F.linear(batch, weight = self.W1.t(), bias = self.c)
             else:

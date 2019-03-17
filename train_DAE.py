@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 
 num_frames = 11
-batch_size = 256         # Number of samples in each minibatch
+batch_size = 512         # Number of samples in each minibatch
 use_cuda = torch.cuda.is_available()
 
 # Setup GPU optimization if CUDA is supported
@@ -50,7 +50,7 @@ num_layers = 3
 model = AE(input_size = input_size, 
            hidden_size = hidden_size,
            num_layers = num_layers,
-           tied = True,
+           tied = False,
            layer_normalization = True)
 model = model.to(computing_device)
 
@@ -61,7 +61,7 @@ criterion_val = nn.MSELoss(reduction='sum')
 criterion_val = criterion_val.to(computing_device)
 
 learning_rate = 0.001
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay = 0.0002)
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer, patience=3)
 
 
@@ -112,7 +112,7 @@ for epoch_number in range(epochs_number):
 
     N = 100
     
-    for minibatch_count, (input, target) in enumerate(tqdm_notebook(train_loader), 0):
+    for minibatch_count, (input, target) in enumerate(tqdm(train_loader), 0):
         model.train()
         
         input = input.float()
@@ -134,12 +134,12 @@ for epoch_number in range(epochs_number):
             print('epoch: {}. Minibatch: {}. Training loss: {}.'.format(epoch_number, 
                                                                         minibatch_count,
                                                                         loss))
-            if minibatch_count % (100 * N) == 0:
+            if minibatch_count % (100 * N) == 0 and minibatch_count != 0:
                 current_val_loss = validate(model, criterion_val, val_loader)
                 print('Val loss: {}'.format(current_val_loss))
                 val_loss_list.append(current_val_loss)
             torch.save(model, './saved_model/DAE.pt')
-    
+            torch.save((loss_list, val_loss_list), './losses.pt')
     
     # if current_val_loss < best_val_loss :        
     #    torch.save(model, 'DAE.pt')
