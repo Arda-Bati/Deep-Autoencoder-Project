@@ -286,7 +286,7 @@ function [ scores ] = stdout2scores( stdout, mode )
         % computed prediction for wideband speech
         case { 'wb', '+wb', 'wideband', '+wideband' }
             tag = 'P.862.2 Prediction (MOS-LQO):  = ';
-            defaults = NaN;
+            defaults = 0;
         % otherwise declare an error
         otherwise
             error( sprintf('Mode: %s is unsupported!\n',mode) );

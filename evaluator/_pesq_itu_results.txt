@@ -15,4 +15,19 @@ REFERENCE	 DEGRADED	 PESQMOS	 PESQMOS	 SUBJMOS	 COND	 SAMPLE_FREQ	 CRUDE_DELAY
  ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
  ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
  ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/pred.wav	 SQValue=1.289	 1.289	 0.000	 0	 8000	-0.1480
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../features/pred/babble/0dB/DR1_MREB0_SX205.wav	 SQValue=0.742	 0.742	 0.000	 0	 8000	0.7120
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../features/test_wav/babble/0dB/DR1_MREB0_SX205.wav	 SQValue=1.923	 1.923	 0.000	 0	 8000	0.0000
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=0.697	 0.697	 0.000	 0	 8000	0.4960
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=0.697	 0.697	 0.000	 0	 8000	0.4960
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=0.697	 0.697	 0.000	 0	 8000	0.4960
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=0.742	 0.742	 0.000	 0	 8000	0.7640
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=0.742	 0.742	 0.000	 0	 8000	0.7640
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=0.742	 0.742	 0.000	 0	 8000	0.7640
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=0.742	 0.742	 0.000	 0	 8000	0.7640
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../features/test_wav/babble/0dB/DR1_MREB0_SX205.wav	 SQValue=1.923	 1.923	 0.000	 0	 8000	0.0000
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=2.373	 2.373	 0.000	 0	 8000	-0.0200
+ ../Noise_Addition/timit_128/test/DR1_MREB0_SX205.wav	 ../display/test_noisy.wav	 SQValue=1.923	 1.923	 0.000	 0	 8000	0.0000
+ ../display/clean.wav	 ../display/pred.wav	 SQValue=2.373	 2.373	 0.000	 0	 8000	-0.0200
+ ../display/clean.wav	 ../display/test_noisy.wav	 SQValue=1.923	 1.923	 0.000	 0	 8000	0.0000
+ ../display/clean.wav	 ../display/test_noisy.wav	 SQValue=1.923	 1.923	 0.000	 0	 8000	0.0000
  
