@@ -51,6 +51,7 @@ model = AE(input_size = input_size,
            hidden_size = hidden_size,
            num_layers = num_layers,
            tied = False,
+           symmetric = False,
            layer_normalization = True)
 model = model.to(computing_device)
 
@@ -62,7 +63,7 @@ criterion_val = criterion_val.to(computing_device)
 
 learning_rate = 0.001
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer, patience=3)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer, patience=0)
 
 
 # In[7]:
@@ -134,7 +135,7 @@ for epoch_number in range(epochs_number):
             print('epoch: {}. Minibatch: {}. Training loss: {}.'.format(epoch_number, 
                                                                         minibatch_count,
                                                                         loss))
-            if minibatch_count % (20 * N) == 0 and minibatch_count != 0:
+            if minibatch_count % (100 * N) == 0 and minibatch_count != 0:
                 current_val_loss = validate(model, criterion_val, val_loader)
                 print('Val loss: {}'.format(current_val_loss))
                 val_loss_list.append(current_val_loss)
