@@ -73,5 +73,8 @@ with torch.no_grad():
                     D = D_a * (np.cos(D_p) + 1j * np.sin(D_p))
 
                     y_pred = librosa.istft(D)
-                    out_fn = os.path.join(root_dir, 'pred', noise_type, snr, fn_base + '.wav')
+                    out_dir = os.path.join(root_dir, 'pred', noise_type, snr)
+                    if not os.path.exists(out_dir):
+                        os.makedirs(out_dir)
+                    out_fn = os.path.join(out_dir, fn_base + '.wav')
                     librosa.output.write_wav(out_fn, y_pred, fs)
