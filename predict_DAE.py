@@ -67,8 +67,8 @@ with torch.no_grad():
                         data_pred[:, i - window_size: i + window_size + 1] = model(data_in).view(-1, num_frames)
 
                     data_pred = data_pred.numpy()
-                    data_pred = data_pred[:, window_size: length - window_size]
-                    D_p = D_p[:, window_size: length - window_size]
+                    data_pred = data_pred[:, : length - window_size]
+                    D_p = D_p[:, : length - window_size]
                     data_pred = data_pred * std + mean
                     D_a = librosa.core.db_to_amplitude(data_pred, ref=1)
                     D = D_a * (np.cos(D_p) + 1j * np.sin(D_p))
