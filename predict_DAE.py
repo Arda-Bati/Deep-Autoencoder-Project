@@ -3,6 +3,7 @@ import numpy as np
 import os
 import librosa
 import scipy
+import soundfile as sf
 from tqdm import tqdm
 
 num_frames = 11
@@ -69,7 +70,7 @@ with torch.no_grad():
                     data_pred = data_pred[:, window_size: length - window_size]
                     D_p = D_p[:, window_size: length - window_size]
                     data_pred = data_pred * std + mean
-                    D_a = librosa.core.db_to_amplitude(data_pred, ref=max_value)
+                    D_a = librosa.core.db_to_amplitude(data_pred, ref=1)
                     D = D_a * (np.cos(D_p) + 1j * np.sin(D_p))
 
                     y_pred = librosa.istft(D)
@@ -77,4 +78,4 @@ with torch.no_grad():
                     if not os.path.exists(out_dir):
                         os.makedirs(out_dir)
                     out_fn = os.path.join(out_dir, fn_base + '.wav')
-                    librosa.output.write_wav(out_fn, y_pred, fs)
+                    sf.write(out_fn, y_pred, fs)
