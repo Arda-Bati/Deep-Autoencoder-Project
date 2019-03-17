@@ -23,4 +23,4 @@ https://ecs.utdallas.edu/loizou/speech/noizeus/
 
 # PESQ
 
-[PESQ](https://www.itu.int/rec/T-REC-P.862-200102-I/en). In the webpage, download the source code and compile it get the executable.
+[PESQ](https://www.itu.int/rec/T-REC-P.862-200102-I/en). In the webpage, download the source code. Compile it to get the executable and add the path to environment variable.
