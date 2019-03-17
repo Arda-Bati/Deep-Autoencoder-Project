@@ -141,9 +141,9 @@ if __name__ == '__main__':
                                                   num_frames=11,
                                                   shuffle=True,
                                                   seed=1,
-                                                  extras={"num_workers": 0, "pin_memory": True})
+                                                  extras={"num_workers": 4, "pin_memory": True})
 
-    for minibatch_count, (inputs, targets) in enumerate(tqdm(val_loader), 0):
+    for minibatch_count, (inputs, targets) in enumerate(tqdm(train_loader), 0):
         # print(inputs.shape)
         # print(np.sum(np.isnan(targets.numpy())))
         pass
