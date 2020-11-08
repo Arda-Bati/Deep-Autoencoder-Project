@@ -1,4 +1,4 @@
-# ECE271B Project Files
+# UCSD ECE271B Project Files
 
 Noizeus Noise sources 128kbps Train & Test files (4 for Train, 6 for Test):  
 https://drive.google.com/open?id=1NKsQkCeixJ1NlWp7DxeqKxzP0golf8Wk
